@@ -1,9 +1,9 @@
 //
 //  SNSDateUtils.h
-//  iPitch V2
+// 
 //
 //  Created by Mac Air on 1/27/13.
-//  Copyright (c) 2013 Cognizant. All rights reserved.
+//  Copyright (c) 2013 Satheeshwaran. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

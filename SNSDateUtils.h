@@ -35,8 +35,16 @@
 + (BOOL)isDate:(NSDate *)date1 smallerThanAnotherDate:(NSDate *)date2;
 
 + (NSString *)monthNameForMonthInNumber:(int)monthNumber withFullMonthName:(BOOL)fullMonth;
-+(NSString *)convertDateToUTC;
 
-+(NSDate *)dateFromUTCTimeStamp:(NSString *)dateString;
++ (NSString *)convertDateToUTC;
+
++ (NSDate *)dateFromUTCTimeStamp:(NSString *)dateString;
+
++ (NSString *)convertDateToUTC:(NSDate *)date;
+
++ (NSInteger)getDiffernceInHoursForDate:(NSDate *)date1 andAnotherDate:(NSDate *)date2;
+
++ (NSInteger)getDiffernceInMinutesForDate:(NSDate *)date1 andAnotherDate:(NSDate *)date2;
+
 
 @end

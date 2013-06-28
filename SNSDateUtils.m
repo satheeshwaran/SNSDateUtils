@@ -1,8 +1,9 @@
 //
 //  SNSDateUtils.m
+//  iPitch V2
 //
 //  Created by Mac Air on 1/27/13.
-//  Copyright (c) 2013 Satheeshwaran. All rights reserved.
+//  Copyright (c) Satheeshwaran. All rights reserved.
 //
 
 #import "SNSDateUtils.h"
@@ -130,7 +131,7 @@
             else
                 return @"Dec";
             break;
-
+            
         default:
             return @"";
             break;
@@ -141,7 +142,7 @@
 
 + (NSDate* )date:(NSDate*)date ByAddingDays:(int)days
 {
-   // NSDate *newDate1 = ;
+    // NSDate *newDate1 = ;
     return [date dateByAddingTimeInterval:60*60*24*days];
 }
 
@@ -170,17 +171,17 @@
 	return [CURRENT_CALENDAR dateFromComponents:components];
 }
 
-+ (NSDateComponents *)componentsForDate:(NSDate *)date 
++ (NSDateComponents *)componentsForDate:(NSDate *)date
 {
     if (date!=nil)
     {
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSGregorianCalendar];
-    
-    NSDateComponents *dayComponents =
-    [gregorian components:DATE_COMPONENTS fromDate:date];
-      
-    return dayComponents;
+        NSCalendar *gregorian = [[NSCalendar alloc]
+                                 initWithCalendarIdentifier:NSGregorianCalendar];
+        
+        NSDateComponents *dayComponents =
+        [gregorian components:DATE_COMPONENTS fromDate:date];
+        
+        return dayComponents;
     }
     
     return nil;
@@ -189,7 +190,7 @@
 +(BOOL)dateIsToday:(NSDate*)date
 {
     NSDate *today=[[NSDate alloc]init];
-   
+    
     if ([[self componentsForDate:date] year]== [[self componentsForDate:today] year])
     {
         if ([[self componentsForDate:date] month]== [[self componentsForDate:today] month])
@@ -199,28 +200,28 @@
                 return YES;
             }
         }
-
-    }
         
+    }
+    
     return NO;
 }
 
 +(BOOL)date:(NSDate *)date IsEqualTo:(NSDate*)anotherdate
 {
     
-//    if ([[self componentsForDate:date] year]== [[self componentsForDate:anotherdate] year])
-//    {
-//        if ([[self componentsForDate:date] month]== [[self componentsForDate:anotherdate] month])
-//        {
-//            if ([[self componentsForDate:date] day]== [[self componentsForDate:anotherdate] day])
-//            {
-//                return YES;
-//            }
-//        }
-//        
-//    }
-//    
-//    return NO;
+    //    if ([[self componentsForDate:date] year]== [[self componentsForDate:anotherdate] year])
+    //    {
+    //        if ([[self componentsForDate:date] month]== [[self componentsForDate:anotherdate] month])
+    //        {
+    //            if ([[self componentsForDate:date] day]== [[self componentsForDate:anotherdate] day])
+    //            {
+    //                return YES;
+    //            }
+    //        }
+    //
+    //    }
+    //
+    //    return NO;
     
     if ([[self dateWithOutTime:date] isEqualToDate:[self dateWithOutTime:anotherdate]]) {
         return YES;
@@ -283,23 +284,57 @@
         return NO;
 }
 
-+(NSString *)convertDateToUTC
++ (NSString *)convertDateToUTC
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
     NSTimeZone *gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     [dateFormatter setTimeZone:gmt];
     NSString *timeStamp = [dateFormatter stringFromDate:[NSDate date]];
-    return timeStamp;
+    if (timeStamp)
+        return timeStamp;
+    
+    else
+        return @"";}
+
++ (NSString *)convertDateToUTC:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+    NSTimeZone *gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    [dateFormatter setTimeZone:gmt];
+    NSString *timeStamp = [dateFormatter stringFromDate:date];
+    if (timeStamp)
+        return timeStamp;
+    
+    else
+        return @"";
 }
 
-+(NSDate *)dateFromUTCTimeStamp:(NSString *)dateString
++ (NSInteger)getDiffernceInHoursForDate:(NSDate *)date1 andAnotherDate:(NSDate *)date2
 {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSz"];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        NSDate* date = [dateFormatter dateFromString:dateString];
-        NSLog(@"Formatted Timestamp: %@ - Original Timestamp: %@", date,dateString);
-        return date;
+    NSTimeInterval distanceBetweenDates = [date1 timeIntervalSinceDate:date2];
+    double secondsInAnHour = 3600;
+    NSInteger hoursBetweenDates = distanceBetweenDates / secondsInAnHour;
+    return hoursBetweenDates;
 }
+
++ (NSInteger)getDiffernceInMinutesForDate:(NSDate *)date1 andAnotherDate:(NSDate *)date2
+{
+    NSTimeInterval distanceBetweenDates = [date1 timeIntervalSinceDate:date2];
+    double minutesInAnHour = 60;
+    NSInteger hoursBetweenDates = distanceBetweenDates / minutesInAnHour;
+    return hoursBetweenDates;
+}
+
++ (NSDate *)dateFromUTCTimeStamp:(NSString *)dateString
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSz"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSDate* date = [dateFormatter dateFromString:dateString];
+    NSLog(@"Formatted Timestamp: %@ - Original Timestamp: %@", date,dateString);
+    return date;
+}
+
 @end

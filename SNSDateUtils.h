@@ -46,5 +46,24 @@
 
 + (NSInteger)getDiffernceInMinutesForDate:(NSDate *)date1 andAnotherDate:(NSDate *)date2;
 
++ (NSDate *)firstDayOfMonthContainingDate:(NSDate *)date;
+
++ (NSDate *)firstDayOfNextMonthContainingDate:(NSDate *)date;
+
++ (NSComparisonResult)compareByMonth:(NSDate *)date toDate:(NSDate *)otherDate;
+
++ (NSInteger)placeInWeekForDate:(NSDate *)date;
+
++ (BOOL)date:(NSDate *)date1 isSameDayAsDate:(NSDate *)date2;
+
++ (NSInteger)numberOfWeeksInMonthContainingDate:(NSDate *)date;
+
++ (NSDate *)nextDay:(NSDate *)date;
+
++ (NSDate *)previousDay:(NSDate *)date;
+
++ (NSInteger)numberOfDaysFromDate:(NSDate *)startDate toDate:(NSDate *)endDate;
+
+
 
 @end

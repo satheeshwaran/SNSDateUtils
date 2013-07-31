@@ -142,13 +142,11 @@
 
 + (NSDate* )date:(NSDate*)date ByAddingDays:(int)days
 {
-    // NSDate *newDate1 = ;
     return [date dateByAddingTimeInterval:60*60*24*days];
 }
 
 + (NSDate* )date:(NSDate*)date ByAddingHours:(int)hours
 {
-    //NSDate *newDate1 = ];
     return [date dateByAddingTimeInterval:60*60*hours];
 }
 
@@ -187,41 +185,9 @@
     return nil;
 }
 
-+(BOOL)dateIsToday:(NSDate*)date
-{
-    NSDate *today=[[NSDate alloc]init];
-    
-    if ([[self componentsForDate:date] year]== [[self componentsForDate:today] year])
-    {
-        if ([[self componentsForDate:date] month]== [[self componentsForDate:today] month])
-        {
-            if ([[self componentsForDate:date] day]== [[self componentsForDate:today] day])
-            {
-                return YES;
-            }
-        }
-        
-    }
-    
-    return NO;
-}
 
 +(BOOL)date:(NSDate *)date IsEqualTo:(NSDate*)anotherdate
 {
-    
-    //    if ([[self componentsForDate:date] year]== [[self componentsForDate:anotherdate] year])
-    //    {
-    //        if ([[self componentsForDate:date] month]== [[self componentsForDate:anotherdate] month])
-    //        {
-    //            if ([[self componentsForDate:date] day]== [[self componentsForDate:anotherdate] day])
-    //            {
-    //                return YES;
-    //            }
-    //        }
-    //
-    //    }
-    //
-    //    return NO;
     
     if ([[self dateWithOutTime:date] isEqualToDate:[self dateWithOutTime:anotherdate]]) {
         return YES;
@@ -335,6 +301,83 @@
     NSDate* date = [dateFormatter dateFromString:dateString];
     NSLog(@"Formatted Timestamp: %@ - Original Timestamp: %@", date,dateString);
     return date;
+}
+
+
++ (NSDate *)firstDayOfMonthContainingDate:(NSDate *)date {
+    NSDateComponents *comps = [CURRENT_CALENDAR components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:date];
+    comps.day = 1;
+    return [CURRENT_CALENDAR dateFromComponents:comps];
+}
+
++ (NSDate *)firstDayOfNextMonthContainingDate:(NSDate *)date {
+    NSDateComponents *comps = [CURRENT_CALENDAR components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:date];
+    comps.day = 1;
+    comps.month = comps.month + 1;
+    return [CURRENT_CALENDAR dateFromComponents:comps];
+}
+
++ (NSComparisonResult)compareByMonth:(NSDate *)date toDate:(NSDate *)otherDate {
+    NSDateComponents *day = [CURRENT_CALENDAR components:NSYearCalendarUnit|NSMonthCalendarUnit fromDate:date];
+    NSDateComponents *day2 = [CURRENT_CALENDAR components:NSYearCalendarUnit|NSMonthCalendarUnit fromDate:otherDate];
+    
+    if (day.year < day2.year) {
+        return NSOrderedAscending;
+    } else if (day.year > day2.year) {
+        return NSOrderedDescending;
+    } else if (day.month < day2.month) {
+        return NSOrderedAscending;
+    } else if (day.month > day2.month) {
+        return NSOrderedDescending;
+    } else {
+        return NSOrderedSame;
+    }
+}
+
++ (NSInteger)placeInWeekForDate:(NSDate *)date {
+    NSDateComponents *compsFirstDayInMonth = [CURRENT_CALENDAR components:NSWeekdayCalendarUnit fromDate:date];
+    return (compsFirstDayInMonth.weekday - 1 - [CURRENT_CALENDAR firstWeekday] + 8) % 7;
+}
+
++ (BOOL)dateIsToday:(NSDate *)date {
+    return [self date:[NSDate date] isSameDayAsDate:date];
+}
+
++ (BOOL)date:(NSDate *)date1 isSameDayAsDate:(NSDate *)date2 {
+    
+    if (date1 == nil || date2 == nil) {
+        return NO;
+    }
+    
+    NSDateComponents *day = [CURRENT_CALENDAR components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:date1];
+    NSDateComponents *day2 = [CURRENT_CALENDAR components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:date2];
+    return ([day2 day] == [day day] &&
+            [day2 month] == [day month] &&
+            [day2 year] == [day year] &&
+            [day2 era] == [day era]);
+}
+
+
++ (NSInteger)numberOfWeeksInMonthContainingDate:(NSDate *)date {
+    return [CURRENT_CALENDAR rangeOfUnit:NSWeekCalendarUnit inUnit:NSMonthCalendarUnit forDate:date].length;
+}
+
++ (NSDate *)nextDay:(NSDate *)date {
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    [comps setDay:1];
+    return [CURRENT_CALENDAR dateByAddingComponents:comps toDate:date options:0];
+}
+
++ (NSDate *)previousDay:(NSDate *)date {
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    [comps setDay:-1];
+    return [CURRENT_CALENDAR dateByAddingComponents:comps toDate:date options:0];
+}
+
++ (NSInteger)numberOfDaysFromDate:(NSDate *)startDate toDate:(NSDate *)endDate {
+    NSInteger startDay = [CURRENT_CALENDAR ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:startDate];
+    NSInteger endDay = [CURRENT_CALENDAR ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:endDate];
+    return endDay - startDay;
 }
 
 @end
